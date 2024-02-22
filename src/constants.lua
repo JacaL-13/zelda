@@ -20,6 +20,7 @@ TILE_SIZE = 16
 -- entity constants
 --
 PLAYER_WALK_SPEED = 60
+HEART_SPAWN_CHANCE = 5 -- 1 in n chance
 
 --
 -- map constants
