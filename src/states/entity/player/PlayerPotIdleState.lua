@@ -3,6 +3,8 @@ PlayerPotIdleState = Class {
 }
 
 function PlayerPotIdleState:init(player, dungeon)
+	self.entity = player
+	
     self.player = player
     self.dungeon = dungeon
 
@@ -16,25 +18,25 @@ end
 function PlayerPotIdleState:update(dt)
     if love.keyboard.isDown('left') or love.keyboard.isDown('right') or love.keyboard.isDown('up') or
         love.keyboard.isDown('down') then
-        self.entity:changeState('PlayerPotWalkState')
+        self.entity:changeState('pot-walk')
     end
 
     if love.keyboard.wasPressed('space') then
         -- Throw pot
     end
 
-    if love.keyboard.wasPressed('lalt') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('lctrl') then
-        -- check if hitbox collides with any pots in the scene
+    -- if love.keyboard.wasPressed('lalt') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('lctrl') then
+    --     -- check if hitbox collides with any pots in the scene
 
-        for k, object in pairs(self.entity.room.objects) do
-            if object:collides(self.pickupBox) and object.type == 'pot' then
-                self.entity:changeState('pickup', object)
-                break
-            end
-        end
+    --     for k, object in pairs(self.entity.room.objects) do
+    --         if object:collides(self.pickupBox) and object.type == 'pot' then
+    --             self.entity:changeState('pickup', object)
+    --             break
+    --         end
+    --     end
 
-        -- self.entity:changeState('pickup')
-    end
+    --     -- self.entity:changeState('pickup')
+    -- end
 end
 
 function PlayerPotIdleState:render()
