@@ -4,9 +4,7 @@
 
     Author: Colton Ogden
     cogden@cs50.harvard.edu
-]]
-
-GAME_OBJECT_DEFS = {
+]] GAME_OBJECT_DEFS = {
     ['switch'] = {
         type = 'switch',
         texture = 'switches',
@@ -24,22 +22,38 @@ GAME_OBJECT_DEFS = {
             }
         }
     },
-	['heart'] = {
+    ['heart'] = {
         type = 'heart',
         texture = 'hearts',
         frame = 5,
         width = 16,
         height = 16,
         solid = false,
-        defaultState = 'idle',
+        defaultState = 'unconsumed',
         states = {
-            ['idle'] = {
-                frame = 5
-            }
-		},
-		consumed = false
+            ['unconsumed'] = {
+				frame = nil
+			},
+            ['consumed'] = {
+				frame = nil
+			}
+        }
     },
     ['pot'] = {
-        -- TODO
+        type = 'pot',
+        texture = 'tiles',
+        frame = 14,
+        width = 16,
+        height = 16,
+        solid = true,
+        defaultState = 'sitting',
+        states = {
+            ['sitting'] = {
+				frame = nil
+			},
+            ['held'] = {
+				frame = nil
+			}
+        }
     }
 }

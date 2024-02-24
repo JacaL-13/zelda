@@ -21,6 +21,7 @@ TILE_SIZE = 16
 --
 PLAYER_WALK_SPEED = 60
 HEART_SPAWN_CHANCE = 5 -- 1 in n chance
+POT_CHANCE = 3 -- 1 in n chance
 
 --
 -- map constants

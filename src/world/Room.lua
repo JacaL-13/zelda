@@ -31,6 +31,8 @@ function Room:init(player)
     -- reference to player for collisions, etc.
     self.player = player
 
+	-- self.player.room = self
+
     -- used for centering the dungeon rendering
     self.renderOffsetX = MAP_RENDER_OFFSET_X
     self.renderOffsetY = MAP_RENDER_OFFSET_Y
@@ -50,6 +52,9 @@ function Room:generateEntities()
         local type = types[math.random(#types)]
 
         table.insert(self.entities, Entity {
+			type = ENTITY_DEFS[type].type,
+			room = self,
+			
             animations = ENTITY_DEFS[type].animations,
             walkSpeed = ENTITY_DEFS[type].walkSpeed or 20,
 
@@ -102,6 +107,43 @@ function Room:generateObjects()
 
     -- add to list of objects in scene (only one switch for now)
     table.insert(self.objects, switch)
+
+    for y = 2, self.height - 1 do
+        table.insert(self.tiles, {})
+
+        for x = 2, self.width - 1 do
+            -- if next to a wall randomly generate pot
+            local wallAbove = y == 2
+            local wallBelow = y == self.height - 1
+            local wallLeft = x == 2
+            local wallRight = x == self.width - 1
+
+            if wallAbove or wallBelow or wallLeft or wallRight then
+                local middleX = self.width / 2
+                local doorwayX = x == middleX or x == middleX + 1
+                local middleY = math.floor(self.height / 2)
+                local doorwayY = y == middleY or y == middleY + 1 or y == middleY + 2
+                local doorway = doorwayX or doorwayY
+
+                if math.random(POT_CHANCE) == 1 and not doorway then
+                    local potFrame = math.random(9)
+
+                    local row = math.ceil(potFrame / 3)
+                    local col = potFrame - 3 * (row - 1)
+
+                    local actualFrame = 19 * row - 6 + col
+
+					local yOffset = y > middleY and 4 or 0
+
+                    local pot = GameObject(GAME_OBJECT_DEFS['pot'], (x) * TILE_SIZE, (y) * TILE_SIZE + yOffset)
+
+                    pot.frame = actualFrame
+
+                    table.insert(self.objects, pot)
+                end
+            end
+        end
+    end
 end
 
 --[[
@@ -135,6 +177,7 @@ function Room:generateWallsAndFloors()
                 id = TILE_BOTTOM_WALLS[math.random(#TILE_BOTTOM_WALLS)]
             else
                 id = TILE_FLOORS[math.random(#TILE_FLOORS)]
+
             end
 
             table.insert(self.tiles[y], {
@@ -166,7 +209,7 @@ function Room:update(dt)
                 heart.onCollide = function(object)
                     self.player.health = math.min(6, self.player.health + 2)
 
-                    object.consumed = true
+                    object.state = 'consumed'
                 end
 
                 table.insert(self.objects, heart)
@@ -193,14 +236,11 @@ function Room:update(dt)
     end
 
     for k, object in pairs(self.objects) do
-        if object.type == 'heart' then
-            print('object consumed', object.consumed)
-        end
 
         object:update(dt)
 
         -- remove any consumed objects
-        if object.consumed then
+        if object.state == 'consumed' then
             table.remove(self.objects, k)
         elseif self.player:collides(object) then
             -- trigger collision callback on object

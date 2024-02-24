@@ -8,6 +8,7 @@
 
 ENTITY_DEFS = {
     ['player'] = {
+		type = 'player',
         walkSpeed = PLAYER_WALK_SPEED,
         animations = {
             ['walk-left'] = {
@@ -69,10 +70,71 @@ ENTITY_DEFS = {
                 interval = 0.05,
                 looping = false,
                 texture = 'character-swing-sword'
+            },
+			['pickup-down'] = {
+				frames = {1, 2, 3},
+				interval = 0.15,
+				looping = false,
+				texture = 'character-pot-lift'
+			},
+			['pickup-right'] = {
+				frames = {4, 5, 6},
+				interval = 0.15,
+				looping = false,
+				texture = 'character-pot-lift'
+			},
+			['pickup-up'] = {
+				frames = {7, 8, 9},
+				interval = 0.15,
+				looping = false,
+				texture = 'character-pot-lift'
+			},
+			['pickup-left'] = {
+				frames = {10, 11, 12},
+				interval = 0.15,
+				looping = false,
+				texture = 'character-pot-lift'
+			},
+			['pot-idle-down'] = {
+				frames = {1},
+				texture = 'character-pot-walk'
+			},
+			['pot-idle-right'] = {
+				frames = {5},
+				texture = 'character-pot-walk'
+			},
+			['pot-idle-up'] = {
+				frames = {9},
+				texture = 'character-pot-walk'
+			},
+			['pot-idle-left'] = {
+				frames = {13},
+				texture = 'character-pot-walk'
+			},
+			['pot-walk-down'] = {
+				frames = {1, 2, 3, 4},
+				interval = 0.15,
+				texture = 'character-pot-walk'
+			},
+            ['pot-walk-right'] = {
+                frames = {5, 6, 7, 8},
+                interval = 0.15,
+                texture = 'character-pot-walk'
+            },
+            ['pot-walk-up'] = {
+                frames = {9, 10, 11, 12},
+                interval = 0.15,
+                texture = 'character-pot-walk'
+            },
+            ['pot-walk-left'] = {
+                frames = {13, 14, 15, 16},
+                interval = 0.15,
+                texture = 'character-pot-walk'
             }
         }
     },
     ['skeleton'] = {
+		type = 'skeleton',
         texture = 'entities',
         animations = {
             ['walk-left'] = {
@@ -106,6 +168,7 @@ ENTITY_DEFS = {
         }
     },
     ['slime'] = {
+		type = 'slime',
         texture = 'entities',
         animations = {
             ['walk-left'] = {
@@ -139,6 +202,7 @@ ENTITY_DEFS = {
         }
     },
     ['bat'] = {
+		type = 'bat',
         texture = 'entities',
         animations = {
             ['walk-left'] = {
@@ -176,6 +240,7 @@ ENTITY_DEFS = {
         }
     },
     ['ghost'] = {
+		type = 'ghost',
         texture = 'entities',
         animations = {
             ['walk-left'] = {
@@ -209,6 +274,7 @@ ENTITY_DEFS = {
         }
     },
     ['spider'] = {
+		type = 'spider',
         texture = 'entities',
         animations = {
             ['walk-left'] = {

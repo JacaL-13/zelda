@@ -44,8 +44,8 @@ function Animation:update(dt)
 
             self.currentFrame = math.max(1, (self.currentFrame + 1) % (#self.frames + 1))
 
-            -- if we've looped back to the beginning, record
-            if self.currentFrame == 1 then
+            -- if we've finished, record
+            if self.currentFrame >= #self.frames then
                 self.timesPlayed = self.timesPlayed + 1
             end
         end
