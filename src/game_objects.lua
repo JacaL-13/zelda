@@ -53,6 +53,12 @@
 			},
             ['held'] = {
 				frame = nil
+			},
+			['thrown'] = {
+				frame = nil
+			},
+			['broken'] = {
+				frame = nil
 			}
         }
     }

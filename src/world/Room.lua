@@ -31,7 +31,7 @@ function Room:init(player)
     -- reference to player for collisions, etc.
     self.player = player
 
-	-- self.player.room = self
+    -- self.player.room = self
 
     -- used for centering the dungeon rendering
     self.renderOffsetX = MAP_RENDER_OFFSET_X
@@ -52,9 +52,9 @@ function Room:generateEntities()
         local type = types[math.random(#types)]
 
         table.insert(self.entities, Entity {
-			type = ENTITY_DEFS[type].type,
-			room = self,
-			
+            type = ENTITY_DEFS[type].type,
+            room = self,
+
             animations = ENTITY_DEFS[type].animations,
             walkSpeed = ENTITY_DEFS[type].walkSpeed or 20,
 
@@ -133,9 +133,9 @@ function Room:generateObjects()
 
                     local actualFrame = 19 * row - 6 + col
 
-					local yOffset = y > middleY and 4 or 0
+                    local yOffset = y > middleY and 4 or 0
 
-                    local pot = GameObject(GAME_OBJECT_DEFS['pot'], (x) * TILE_SIZE, (y) * TILE_SIZE + yOffset)
+                    local pot = GameObject(GAME_OBJECT_DEFS['pot'], (x) * TILE_SIZE, (y) * TILE_SIZE + yOffset, self)
 
                     pot.frame = actualFrame
 
@@ -239,8 +239,8 @@ function Room:update(dt)
 
         object:update(dt)
 
-        -- remove any consumed objects
-        if object.state == 'consumed' then
+        -- remove any consumed or broken objects
+        if object.state == 'consumed' or object.state == 'broken' then
             table.remove(self.objects, k)
         elseif self.player:collides(object) then
             -- trigger collision callback on object
@@ -266,8 +266,14 @@ function Room:render()
         doorway:render(self.adjacentOffsetX, self.adjacentOffsetY)
     end
 
+    local held = nil
+
     for k, object in pairs(self.objects) do
-        object:render(self.adjacentOffsetX, self.adjacentOffsetY)
+        if object.state == 'held' then
+            held = object
+        else
+            object:render(self.adjacentOffsetX, self.adjacentOffsetY)
+        end
     end
 
     for k, entity in pairs(self.entities) do
@@ -300,6 +306,10 @@ function Room:render()
 
     if self.player then
         self.player:render()
+    end
+
+    if held then
+        held:render(self.adjacentOffsetX, self.adjacentOffsetY)
     end
 
     love.graphics.setStencilTest()

@@ -8,8 +8,10 @@
 
 GameObject = Class{}
 
-function GameObject:init(def, x, y)
+function GameObject:init(def, x, y, room)
     
+	self.room = room
+	
     -- string identifying this object type
     self.type = def.type
 
@@ -28,13 +30,58 @@ function GameObject:init(def, x, y)
     self.y = y
     self.width = def.width
     self.height = def.height
+
+	self.thrownX = 0
+	self.thrownY = 0
+	self.thrownDirectionX = 0
+	self.thrownDirectionY = 0
+	self.thrownProgress = 0
 	
     -- default empty collision callback
     self.onCollide = function() end
 end
 
 function GameObject:update(dt)
+	-- if state = 'held' then follow player
+		if self.state == 'held' then
+			self.x = self.room.player.x
+			self.y = self.room.player.y - 9
+		elseif self.state == 'thrown' then
+			if self.thrownProgress == 0 then
+				self.thrownX = self.x
+				self.thrownY = self.y
+				
+				local direction = self.room.player.direction
 
+				self.thrownDirectionX = direction == 'left' and -1 or direction == 'right' and 1 or 0
+				self.thrownDirectionY = direction == 'up' and -1 or direction == 'down' and 1 or 0
+
+				self.thrownProgress = 1
+			elseif self.thrownProgress > POT_THROW_RANGE then
+				-- play hit sound
+				gSounds['hit-enemy']:play()
+
+				self.state = 'broken'
+			else
+				local potYTravel = self.thrownDirectionY == 0 and 1 / POT_THROW_RANGE or self.thrownDirectionY
+				
+				self.x = self.x + self.thrownDirectionX * TILE_SIZE * 30 * dt
+				self.y = self.y + potYTravel * TILE_SIZE * 30 * dt
+
+				self.thrownProgress = self.thrownProgress + 1
+
+				for k, entity in pairs(self.room.entities) do
+					if not entity.dead and entity:collides(self) and entity.type ~= 'ghost' then
+							print(entity.type)
+							entity:damage(1)
+
+							gSounds['hit-enemy']:play()
+
+							self.state = 'broken'
+					end
+				end
+			end
+		end
 end
 
 function GameObject:collides(target)

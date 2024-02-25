@@ -4,15 +4,13 @@
 
     Author: Colton Ogden
     cogden@cs50.harvard.edu
-]]
-
-Entity = Class{}
+]] Entity = Class {}
 
 function Entity:init(def)
 
-	self.type = def.type
-	self.room = def.room
-	
+    self.type = def.type
+    self.room = def.room
+
     -- in top-down games, there are four directions instead of two
     self.direction = 'down'
 
@@ -61,8 +59,8 @@ end
     AABB with some slight shrinkage of the box on the top side for perspective.
 ]]
 function Entity:collides(target)
-    return not (self.x + self.width < target.x or self.x > target.x + target.width or
-                self.y + self.height < target.y or self.y > target.y + target.height)
+    return not (self.x + self.width < target.x or self.x > target.x + target.width or self.y + self.height < target.y or
+               self.y > target.y + target.height)
 end
 
 function Entity:damage(dmg)
@@ -74,8 +72,8 @@ function Entity:goInvulnerable(duration)
     self.invulnerableDuration = duration
 end
 
-function Entity:changeState(name)
-    self.stateMachine:change(name)
+function Entity:changeState(name, params)
+    self.stateMachine:change(name, params)
 end
 
 function Entity:changeAnimation(name)
@@ -107,11 +105,11 @@ function Entity:processAI(params, dt)
 end
 
 function Entity:render(adjacentOffsetX, adjacentOffsetY)
-    
+
     -- draw sprite slightly transparent if invulnerable every 0.04 seconds
     if self.invulnerable and self.flashTimer > 0.06 then
         self.flashTimer = 0
-        love.graphics.setColor(1, 1, 1, 64/255)
+        love.graphics.setColor(1, 1, 1, 64 / 255)
     end
 
     self.x, self.y = self.x + (adjacentOffsetX or 0), self.y + (adjacentOffsetY or 0)

@@ -57,7 +57,9 @@ function PlayerIdleState:update(dt)
 
         for k, object in pairs(self.entity.room.objects) do
             if object:collides(self.pickupBox) and object.type == 'pot' then
-				self.entity:changeState('pickup', object)
+				self.entity:changeState('pickup', {
+					object = object
+				})
 				break
             end
         end

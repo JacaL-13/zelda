@@ -9,6 +9,7 @@
 PlayerPickupState = Class{__includes = BaseState}
 
 function PlayerPickupState:init(player, dungeon)
+	
     self.player = player
     self.dungeon = dungeon
 
@@ -21,8 +22,7 @@ function PlayerPickupState:init(player, dungeon)
 end
 
 function PlayerPickupState:enter(params)
-	-- enter animation
-	
+	self.object = params.object
 end
 
 function PlayerPickupState:update(dt)
@@ -30,7 +30,12 @@ function PlayerPickupState:update(dt)
     -- if we've fully elapsed through one cycle of animation, change back to idle state
     if self.player.currentAnimation.timesPlayed > 0 then
         self.player.currentAnimation.timesPlayed = 0
-        self.player:changeState('pot-idle')
+
+		self.object.state = 'held'
+		
+        self.player:changeState('pot-idle', {
+			object = self.object
+		})
     end
 
 end
