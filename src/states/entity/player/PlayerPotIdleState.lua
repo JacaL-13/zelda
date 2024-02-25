@@ -3,8 +3,8 @@ PlayerPotIdleState = Class {
 }
 
 function PlayerPotIdleState:init(player, dungeon)
-	self.entity = player
-	
+    self.entity = player
+
     self.player = player
     self.dungeon = dungeon
 
@@ -16,23 +16,24 @@ function PlayerPotIdleState:init(player, dungeon)
 end
 
 function PlayerPotIdleState:enter(params)
-	self.object = params.object
+    self.object = params.object
 end
 
 function PlayerPotIdleState:update(dt)
     if love.keyboard.isDown('left') or love.keyboard.isDown('right') or love.keyboard.isDown('up') or
         love.keyboard.isDown('down') then
         self.entity:changeState('pot-walk', {
-			object = self.object
-		})
+            object = self.object
+        })
     end
 
-    if love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('lalt') or love.keyboard.wasPressed('lctl') or
+        love.keyboard.wasPressed('return') then
         -- Throw pot
-		self.object.state = 'thrown'
+        self.object.state = 'thrown'
 
-		-- Go back to idle state
-		self.entity:changeState('idle')
+        -- Go back to idle state
+        self.entity:changeState('idle')
     end
 
     -- if love.keyboard.wasPressed('lalt') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('lctrl') then

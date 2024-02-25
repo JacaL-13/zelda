@@ -113,4 +113,46 @@ function PlayerWalkState:update(dt)
             self.entity.y = self.entity.y - PLAYER_WALK_SPEED * dt
         end
     end
+
+	local direction = self.entity.direction
+    local pickupBoxX, pickupBoxY, pickupBoxWidth, pickupBoxHeight
+
+    if direction == 'left' then
+        pickupBoxWidth = 8
+        pickupBoxHeight = 16
+        pickupBoxX = self.entity.x - pickupBoxWidth
+        pickupBoxY = self.entity.y + 2
+    elseif direction == 'right' then
+        pickupBoxWidth = 8
+        pickupBoxHeight = 16
+        pickupBoxX = self.entity.x + self.entity.width
+        pickupBoxY = self.entity.y + 2
+    elseif direction == 'up' then
+        pickupBoxWidth = 16
+        pickupBoxHeight = 8
+        pickupBoxX = self.entity.x
+        pickupBoxY = self.entity.y - pickupBoxHeight
+    else
+        pickupBoxWidth = 16
+        pickupBoxHeight = 8
+        pickupBoxX = self.entity.x
+        pickupBoxY = self.entity.y + self.entity.height
+    end
+
+    local pickupBox = Hitbox(pickupBoxX, pickupBoxY, pickupBoxWidth, pickupBoxHeight)
+	
+	if love.keyboard.wasPressed('lalt') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('lctrl') then
+        -- check if hitbox collides with any pots in the scene
+
+        for k, object in pairs(self.entity.room.objects) do
+            if object:collides(pickupBox) and object.type == 'pot' then
+				self.entity:changeState('pickup', {
+					object = object
+				})
+				break
+            end
+        end
+
+        -- self.entity:changeState('pickup')
+    end
 end

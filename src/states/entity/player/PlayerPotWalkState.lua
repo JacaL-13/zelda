@@ -18,7 +18,7 @@ function PlayerPotWalkState:init(player, dungeon)
 end
 
 function PlayerPotWalkState:enter(params)
-	self.object = params.object
+    self.object = params.object
 end
 
 function PlayerPotWalkState:update(dt)
@@ -36,12 +36,17 @@ function PlayerPotWalkState:update(dt)
         self.entity:changeAnimation('pot-walk-down')
     else
         self.entity:changeState('pot-idle', {
-			object = self.object
-		})
+            object = self.object
+        })
     end
 
-    if love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('space') or love.keyboard.wasPressed('lalt') or love.keyboard.wasPressed('lctl') or
+        love.keyboard.wasPressed('return') then
         -- Throw pot
+        self.object.state = 'thrown'
+
+        -- Go back to idle state
+        self.entity:changeState('idle')
     end
 
     -- perform base collision detection against walls

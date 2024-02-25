@@ -130,7 +130,10 @@ function Dungeon:finishShifting()
 
     -- this room (previously the off-screen room) should now be in the center, not offset
     self.currentRoom.adjacentOffsetX = 0
-    self.currentRoom.adjacentOffsetY = 0 
+    self.currentRoom.adjacentOffsetY = 0
+
+	-- change player state to idle
+	self.player:changeState('idle')
 end
 
 function Dungeon:update(dt)
